@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Conferencistas
+{% endblock %}
+
+{% block container %}
+    
+    <!--Formulario-->
+    <div class="row">
+        <div class="col-3">
+            <form action="{% url 'conferencistas' %}" method="post">
+            {% csrf_token %}
+
+
+                <div class="form-group mb-3">
+                    <label for="">Nombre: </label>
+                    <input type="text" class="form-control" name="nombre" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="">Apellido: </label>
+                    <input type="text" class="form-control" name="apellido" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="">Experiencia: </label>
+                    <textarea name="experiencia" class="form-control" rows="5" required></textarea>
+                </div>
+                
+                <div class="mt-4">
+                    <button class="btn btn-primary">Registrar Conferencistas</button>
+                </div>
+
+            </form>
+            <div class="mt-5">
+                {% if messages %}
+                    <div class="alert alert-success mb-2">
+                {% for message in messages %}
+                    {{ message}}
+                {% endfor %}
+                </div>
+            {% endif %}
+            </div>
+        </div>
+
+         <!--Tabla-->
+
+        <div class="col-9">
+            <div>
+                <h1>Lista de conferencistas : {{conferencistas.count}}</h1>
+            </div>
+            <form action="" >
+                <input type="search" value="{{ q|default_if_none:'' }}" class="form-control" placeholder="Buscar por medio del nombre..." name="q">
+            </form>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Experiencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if conferencistas %}
+                        {% for c  in conferencistas  %}
+                            <tr>
+                                <td>{{c.nombre}}</td>
+                                <td>{{c.apellido}}</td>
+                                <td>{{c.experiencia}}</td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td class="text-center text-danger" colspan=3>No se encuetra resultados...</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+
+   
+ 
+
+{% endblock %}
+
+{% block js %}
+<script>
+    $(function () {
+        
+        setTimeout(() => {
+            $('.alert').slideUp(function () {
+                $(this).remove();
+            });
+        }, 3000)
+
+    });
+</script>
+{% endblock  %}
